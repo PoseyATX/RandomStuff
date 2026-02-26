@@ -1,0 +1,1000 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Texas Legislature: Bill to Law — Starfleet Command Edition</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;900&family=Share+Tech+Mono&family=Rajdhani:wght@300;400;600&display=swap');
+
+  :root {
+    --lcars-gold: #FF9900;
+    --lcars-orange: #FF6600;
+    --lcars-blue: #9999FF;
+    --lcars-purple: #CC66FF;
+    --lcars-teal: #00CCCC;
+    --lcars-red: #FF3300;
+    --lcars-green: #00CC66;
+    --lcars-yellow: #FFCC00;
+    --bg-dark: #000814;
+    --bg-panel: #050d1a;
+    --text-main: #E8E8FF;
+    --house-color: #3399FF;
+    --senate-color: #9933CC;
+    --danger-color: #FF3300;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg-dark);
+    color: var(--text-main);
+    font-family: 'Rajdhani', sans-serif;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      radial-gradient(1px 1px at 10% 15%, rgba(255,255,255,0.6) 0%, transparent 100%),
+      radial-gradient(1px 1px at 25% 40%, rgba(255,255,255,0.4) 0%, transparent 100%),
+      radial-gradient(1px 1px at 50% 10%, rgba(255,255,255,0.5) 0%, transparent 100%),
+      radial-gradient(1px 1px at 75% 60%, rgba(255,255,255,0.3) 0%, transparent 100%),
+      radial-gradient(1px 1px at 85% 25%, rgba(255,255,255,0.6) 0%, transparent 100%),
+      radial-gradient(1px 1px at 15% 75%, rgba(255,255,255,0.4) 0%, transparent 100%),
+      radial-gradient(1px 1px at 40% 85%, rgba(255,255,255,0.3) 0%, transparent 100%),
+      radial-gradient(1px 1px at 60% 50%, rgba(255,255,255,0.5) 0%, transparent 100%),
+      radial-gradient(1px 1px at 90% 80%, rgba(255,255,255,0.4) 0%, transparent 100%),
+      radial-gradient(1px 1px at 5% 55%, rgba(255,255,255,0.5) 0%, transparent 100%),
+      radial-gradient(1px 1px at 35% 20%, rgba(255,255,255,0.3) 0%, transparent 100%),
+      radial-gradient(1px 1px at 70% 35%, rgba(255,255,255,0.6) 0%, transparent 100%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .page-wrapper {
+    position: relative;
+    z-index: 1;
+    padding: 20px;
+    max-width: 1300px;
+    margin: 0 auto;
+  }
+
+  /* LCARS Header */
+  .lcars-header {
+    display: flex;
+    align-items: stretch;
+    margin-bottom: 20px;
+  }
+
+  .lcars-corner {
+    width: 110px;
+    min-height: 80px;
+    background: var(--lcars-orange);
+    border-radius: 30px 0 0 0;
+    display: flex;
+    align-items: flex-end;
+    padding-bottom: 8px;
+    padding-left: 10px;
+    flex-shrink: 0;
+  }
+
+  .lcars-corner-text {
+    font-family: 'Orbitron', monospace;
+    font-size: 7px;
+    color: var(--bg-dark);
+    font-weight: 700;
+    letter-spacing: 1px;
+    line-height: 1.3;
+  }
+
+  .lcars-header-bars {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .lcars-bar-top {
+    background: var(--lcars-gold);
+    height: 20px;
+    display: flex;
+    align-items: center;
+    padding: 0 16px;
+    gap: 6px;
+  }
+
+  .lcars-bar-mid {
+    background: var(--bg-panel);
+    border-top: 2px solid var(--lcars-blue);
+    border-bottom: 2px solid var(--lcars-blue);
+    flex: 1;
+    display: flex;
+    align-items: center;
+    padding: 10px 16px;
+  }
+
+  .lcars-bar-bot { background: var(--lcars-purple); height: 12px; }
+
+  .header-title {
+    font-family: 'Orbitron', monospace;
+    font-size: clamp(12px, 2vw, 22px);
+    font-weight: 900;
+    color: var(--lcars-gold);
+    letter-spacing: 3px;
+    text-shadow: 0 0 20px rgba(255,153,0,0.5);
+  }
+
+  .header-subtitle {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: clamp(9px, 1vw, 11px);
+    color: var(--lcars-teal);
+    letter-spacing: 2px;
+    margin-top: 4px;
+    opacity: 0.8;
+  }
+
+  .lcars-pip {
+    width: 7px; height: 7px;
+    border-radius: 50%;
+    background: var(--bg-dark);
+    flex-shrink: 0;
+  }
+
+  .status-dot {
+    display: inline-block;
+    width: 5px; height: 5px;
+    border-radius: 50%;
+    background: var(--lcars-green);
+    animation: blink 1.5s step-end infinite;
+    margin-right: 5px;
+    vertical-align: middle;
+  }
+
+  @keyframes blink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.1; }
+  }
+
+  /* Legend */
+  .legend-bar {
+    display: flex;
+    gap: 16px;
+    margin-bottom: 20px;
+    padding: 10px 16px;
+    background: rgba(5,13,26,0.9);
+    border: 1px solid var(--lcars-blue);
+    border-radius: 4px;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 1px;
+  }
+
+  .legend-box { width: 18px; height: 10px; border-radius: 2px; border: 1px solid rgba(255,255,255,0.3); }
+
+  /* Scanline */
+  .scanline {
+    position: fixed;
+    inset: 0;
+    background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,0.04) 2px, rgba(0,0,0,0.04) 4px);
+    pointer-events: none;
+    z-index: 999;
+  }
+
+  /* ============== FLOWCHART ============== */
+  .flowchart-outer {
+    display: flex;
+    gap: 0;
+    align-items: flex-start;
+  }
+
+  .chamber-label-vert {
+    writing-mode: vertical-rl;
+    text-orientation: mixed;
+    transform: rotate(180deg);
+    font-family: 'Orbitron', monospace;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 4px;
+    padding: 20px 8px;
+    border-radius: 4px;
+    text-align: center;
+    width: 32px;
+    flex-shrink: 0;
+    align-self: stretch;
+  }
+
+  .chamber-label-vert.house {
+    background: linear-gradient(180deg, #001a3a, #001533);
+    color: var(--house-color);
+    border-left: 3px solid var(--house-color);
+    text-shadow: 0 0 8px rgba(51,153,255,0.7);
+  }
+
+  .chamber-label-vert.senate {
+    background: linear-gradient(180deg, #1a0033, #130026);
+    color: var(--senate-color);
+    border-right: 3px solid var(--senate-color);
+    text-shadow: 0 0 8px rgba(153,51,204,0.7);
+  }
+
+  .flow-main {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0;
+    padding: 0 8px;
+  }
+
+  /* NODES */
+  .node {
+    width: 100%;
+    max-width: 900px;
+    padding: 12px 16px;
+    border-radius: 4px;
+    position: relative;
+  }
+
+  .node-title {
+    font-family: 'Orbitron', monospace;
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 5px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .node-icon { font-size: 18px; }
+
+  .node-body {
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 13px;
+    font-weight: 400;
+    line-height: 1.45;
+    opacity: 0.88;
+  }
+
+  /* color variants */
+  .node-start {
+    background: linear-gradient(135deg, #001228, #001e40);
+    border: 2px solid var(--lcars-gold);
+    box-shadow: 0 0 20px rgba(255,153,0,0.25);
+  }
+  .node-start .node-title { color: var(--lcars-gold); }
+
+  .node-house {
+    background: linear-gradient(135deg, #000d1e, #001530);
+    border: 1px solid var(--house-color);
+    border-left: 3px solid var(--house-color);
+    box-shadow: 0 0 10px rgba(51,153,255,0.15);
+  }
+  .node-house .node-title { color: var(--house-color); }
+
+  .node-senate {
+    background: linear-gradient(135deg, #0a0020, #140030);
+    border: 1px solid var(--senate-color);
+    border-right: 3px solid var(--senate-color);
+    box-shadow: 0 0 10px rgba(153,51,204,0.15);
+  }
+  .node-senate .node-title { color: var(--senate-color); }
+
+  .node-shared {
+    background: linear-gradient(135deg, #001515, #001f2a);
+    border: 1px solid var(--lcars-teal);
+    box-shadow: 0 0 10px rgba(0,204,204,0.15);
+  }
+  .node-shared .node-title { color: var(--lcars-teal); }
+
+  .node-gov {
+    background: linear-gradient(135deg, #1a1000, #2a1a00);
+    border: 2px solid var(--lcars-yellow);
+    box-shadow: 0 0 18px rgba(255,204,0,0.25);
+  }
+  .node-gov .node-title { color: var(--lcars-yellow); }
+
+  .node-law {
+    background: linear-gradient(135deg, #001508, #002210);
+    border: 2px solid var(--lcars-green);
+    box-shadow: 0 0 25px rgba(0,204,102,0.35);
+  }
+  .node-law .node-title { color: var(--lcars-green); }
+
+  .node-fail {
+    background: linear-gradient(135deg, #1a0000, #280000);
+    border: 1px solid var(--lcars-red);
+    opacity: 0.85;
+  }
+  .node-fail .node-title { color: var(--lcars-red); }
+
+  /* POINT OF ORDER */
+  .node-poo {
+    background: linear-gradient(135deg, #180a00, #2a1200);
+    border: 2px solid var(--lcars-orange);
+    box-shadow: 0 0 15px rgba(255,102,0,0.3);
+  }
+  .node-poo .node-title { color: var(--lcars-orange); }
+
+  .poo-badge {
+    position: absolute;
+    top: -11px;
+    right: 12px;
+    background: var(--lcars-orange);
+    border-radius: 3px;
+    padding: 2px 8px;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 8px;
+    color: #000;
+    font-weight: 700;
+    letter-spacing: 2px;
+    animation: poo-pulse 2s ease-in-out infinite;
+    box-shadow: 0 0 8px rgba(255,102,0,0.6);
+  }
+
+  @keyframes poo-pulse {
+    0%, 100% { box-shadow: 0 0 8px rgba(255,102,0,0.6); }
+    50% { box-shadow: 0 0 16px rgba(255,102,0,1), 0 0 30px rgba(255,102,0,0.3); }
+  }
+
+  .poo-risks {
+    margin-top: 6px;
+    padding-top: 6px;
+    border-top: 1px solid rgba(255,102,0,0.3);
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 9px;
+    color: rgba(255,140,50,0.8);
+    letter-spacing: 0.5px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+
+  .poo-risk-tag {
+    background: rgba(255,102,0,0.15);
+    border: 1px solid rgba(255,102,0,0.4);
+    border-radius: 2px;
+    padding: 1px 6px;
+  }
+
+  /* CONNECTORS */
+  .conn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    max-width: 900px;
+    gap: 0;
+  }
+
+  .conn-line {
+    width: 2px;
+    height: 20px;
+  }
+
+  .conn-line-house { background: linear-gradient(180deg, rgba(51,153,255,0.2), rgba(51,153,255,0.7)); }
+  .conn-line-senate { background: linear-gradient(180deg, rgba(153,51,204,0.2), rgba(153,51,204,0.7)); }
+  .conn-line-shared { background: linear-gradient(180deg, rgba(0,204,204,0.2), rgba(0,204,204,0.7)); }
+  .conn-line-gold { background: linear-gradient(180deg, rgba(255,204,0,0.2), rgba(255,204,0,0.7)); }
+  .conn-line-green { background: linear-gradient(180deg, rgba(0,204,102,0.2), rgba(0,204,102,0.7)); }
+  .conn-line-neutral { background: linear-gradient(180deg, rgba(153,153,255,0.2), rgba(153,153,255,0.7)); }
+
+  .conn-arrow {
+    font-size: 12px;
+    line-height: 1;
+  }
+
+  .conn-label {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 8px;
+    letter-spacing: 1px;
+    margin-top: 2px;
+    opacity: 0.7;
+  }
+
+  /* DUAL CHAMBER ROW */
+  .dual-row {
+    display: flex;
+    width: 100%;
+    max-width: 900px;
+    gap: 12px;
+    align-items: flex-start;
+  }
+
+  .dual-col {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0;
+  }
+
+  .dual-col .node { max-width: 100%; }
+
+  .dual-col .conn { max-width: 100%; }
+
+  /* Divider between dual cols */
+  .dual-divider {
+    width: 2px;
+    background: linear-gradient(180deg, var(--house-color), var(--lcars-teal), var(--senate-color));
+    align-self: stretch;
+    flex-shrink: 0;
+    opacity: 0.4;
+    margin: 0;
+  }
+
+  /* Section header strip */
+  .section-strip {
+    width: 100%;
+    max-width: 900px;
+    display: flex;
+    align-items: center;
+    gap: 0;
+    margin: 12px 0 8px;
+  }
+
+  .section-strip-bar {
+    height: 3px;
+    flex: 1;
+  }
+
+  .section-strip-label {
+    padding: 5px 16px;
+    font-family: 'Orbitron', monospace;
+    font-size: 8px;
+    font-weight: 700;
+    letter-spacing: 3px;
+    border-radius: 2px;
+    white-space: nowrap;
+  }
+
+  /* Cross-chamber label */
+  .cross-label {
+    width: 100%;
+    max-width: 900px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin: 4px 0;
+  }
+
+  .cross-line { flex: 1; height: 1px; background: linear-gradient(90deg, var(--house-color), var(--senate-color)); opacity: 0.5; }
+
+  .cross-text {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 8px;
+    color: var(--lcars-teal);
+    letter-spacing: 1px;
+    padding: 3px 10px;
+    border: 1px solid rgba(0,204,204,0.3);
+    border-radius: 2px;
+    white-space: nowrap;
+  }
+
+  /* Three-option row */
+  .triple-row {
+    display: flex;
+    gap: 10px;
+    width: 100%;
+    max-width: 900px;
+  }
+
+  .triple-col { flex: 1; }
+
+  /* POO Summary panel */
+  .poo-panel {
+    margin-top: 20px;
+    padding: 14px 18px;
+    background: rgba(255,102,0,0.04);
+    border: 1px solid rgba(255,102,0,0.35);
+    border-radius: 4px;
+  }
+
+  .poo-panel-title {
+    font-family: 'Orbitron', monospace;
+    font-size: 9px;
+    color: var(--lcars-orange);
+    letter-spacing: 3px;
+    margin-bottom: 12px;
+    animation: flicker 4s infinite;
+  }
+
+  @keyframes flicker {
+    0%, 94%, 100% { opacity: 1; }
+    95% { opacity: 0.3; }
+    97% { opacity: 1; }
+    99% { opacity: 0.2; }
+  }
+
+  .poo-grid {
+    display: flex;
+    gap: 14px;
+    flex-wrap: wrap;
+  }
+
+  .poo-col { flex: 1; min-width: 180px; }
+
+  .poo-col-title {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 1px;
+    margin-bottom: 6px;
+  }
+
+  .poo-list {
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 12px;
+    line-height: 1.65;
+    color: #bbb;
+  }
+
+  /* Footer */
+  .lcars-footer {
+    margin-top: 24px;
+    display: flex;
+    gap: 0;
+    height: 36px;
+  }
+
+  .lcars-footer-corner { width: 90px; background: var(--lcars-blue); border-radius: 0 0 0 18px; }
+  .lcars-footer-bar1 { flex: 2; background: var(--lcars-teal); margin-left: 4px; }
+  .lcars-footer-bar2 { flex: 1; background: var(--lcars-purple); margin-left: 4px; display: flex; align-items: center; justify-content: flex-end; padding-right: 14px; }
+  .footer-text { font-family: 'Share Tech Mono', monospace; font-size: 8px; color: var(--bg-dark); letter-spacing: 2px; }
+  .lcars-footer-end { width: 70px; background: var(--lcars-orange); margin-left: 4px; border-radius: 0 0 18px 0; display: flex; align-items: center; justify-content: center; }
+</style>
+</head>
+<body>
+<div class="scanline"></div>
+<div class="page-wrapper">
+
+  <!-- Header -->
+  <div class="lcars-header">
+    <div class="lcars-corner">
+      <div class="lcars-corner-text">STARFLEET<br>LEGISLATIVE<br>COMMAND<br>SYSTEM</div>
+    </div>
+    <div class="lcars-header-bars">
+      <div class="lcars-bar-top">
+        <div class="lcars-pip"></div><div class="lcars-pip"></div><div class="lcars-pip"></div>
+        <div class="lcars-pip" style="background:var(--lcars-gold);"></div>
+        <div class="lcars-pip" style="background:var(--house-color);"></div>
+        <div class="lcars-pip" style="background:var(--senate-color);"></div>
+      </div>
+      <div class="lcars-bar-mid">
+        <div>
+          <div class="header-title">TEXAS LEGISLATURE — BILL-TO-LAW PATHWAY · LCARS FLOWCHART</div>
+          <div class="header-subtitle"><span class="status-dot"></span>STARDATE: 89TH SESSION · REF: TX-GOV-0001 · BICAMERAL SYSTEMS ONLINE · STATUS: NOMINAL</div>
+        </div>
+      </div>
+      <div class="lcars-bar-bot"></div>
+    </div>
+  </div>
+
+  <!-- Legend -->
+  <div class="legend-bar">
+    <div class="legend-item">
+      <div class="legend-box" style="background:#001530; border-color:var(--house-color);"></div>
+      <span style="color:var(--house-color);">HOUSE · 150 MEMBERS</span>
+    </div>
+    <div class="legend-item">
+      <div class="legend-box" style="background:#130026; border-color:var(--senate-color);"></div>
+      <span style="color:var(--senate-color);">SENATE · 31 MEMBERS</span>
+    </div>
+    <div class="legend-item">
+      <div class="legend-box" style="background:#001f2a; border-color:var(--lcars-teal);"></div>
+      <span style="color:var(--lcars-teal);">BICAMERAL / JOINT ACTION</span>
+    </div>
+    <div class="legend-item">
+      <div class="legend-box" style="background:#2a1200; border-color:var(--lcars-orange);"></div>
+      <span style="color:var(--lcars-orange);">⚠ POINT OF ORDER RISK ZONE</span>
+    </div>
+    <div class="legend-item" style="margin-left:auto;">
+      <div class="legend-box" style="background:#002210; border-color:var(--lcars-green);"></div>
+      <span style="color:var(--lcars-green);">ENACTED LAW</span>
+    </div>
+  </div>
+
+  <!-- FLOWCHART -->
+  <div class="flowchart-outer">
+
+    <div class="chamber-label-vert house">HOUSE OF REPRESENTATIVES</div>
+
+    <div class="flow-main">
+
+      <!-- 1. INTRODUCTION -->
+      <div class="section-strip">
+        <div class="section-strip-bar" style="background:linear-gradient(90deg, transparent, var(--lcars-gold));"></div>
+        <div class="section-strip-label" style="background:rgba(255,153,0,0.15); color:var(--lcars-gold); border:1px solid var(--lcars-gold);">◈ PHASE I — INTRODUCTION</div>
+        <div class="section-strip-bar" style="background:linear-gradient(90deg, var(--lcars-gold), transparent);"></div>
+      </div>
+
+      <div class="node node-start">
+        <div class="node-title"><span class="node-icon">🚀</span> BILL FILING · STARFLEET ALPHA SEQUENCE</div>
+        <div class="node-body">A member of either chamber drafts and files the bill. The bill receives a number (HB### or SB###), is read by title only for the <strong>First Reading</strong>, and is referred to a standing committee by the Speaker (House) or Lieutenant Governor (Senate). The originating chamber determines the bill's primary pathway.</div>
+      </div>
+
+      <!-- Split down to dual chambers -->
+      <div class="conn">
+        <div class="conn-line conn-line-neutral" style="height:14px;"></div>
+        <div class="conn-arrow" style="color:var(--lcars-blue);">▼</div>
+        <div class="conn-label" style="color:#aaa;">ORIGINATING CHAMBER DETERMINES PRIMARY PATH</div>
+      </div>
+
+      <!-- DUAL CHAMBER: Committee -->
+      <div class="section-strip">
+        <div class="section-strip-bar" style="background:linear-gradient(90deg, transparent, var(--house-color));"></div>
+        <div class="section-strip-label" style="background:rgba(0,50,100,0.3); color:#aaa; border:1px solid rgba(153,153,255,0.3);">◈ PHASE II — COMMITTEE REVIEW (BOTH CHAMBERS)</div>
+        <div class="section-strip-bar" style="background:linear-gradient(90deg, var(--senate-color), transparent);"></div>
+      </div>
+
+      <div class="dual-row">
+        <!-- HOUSE COMMITTEE -->
+        <div class="dual-col">
+          <div class="node node-poo">
+            <div class="poo-badge">⚠ POINT OF ORDER</div>
+            <div class="node-title"><span class="node-icon">🏛️</span> HOUSE STANDING COMMITTEE</div>
+            <div class="node-body">Speaker refers bill to appropriate committee. Committee holds a <strong>public hearing</strong> — witnesses testify for/against. Committee may adopt a substitute (rewritten) bill. Members vote to report the bill favorably, with amendments, or unfavorably to the full House.</div>
+            <div class="poo-risks">
+              <div class="poo-risk-tag">Improper referral</div>
+              <div class="poo-risk-tag">Report not properly filed/signed</div>
+              <div class="poo-risk-tag">24-hr hearing notice violation</div>
+              <div class="poo-risk-tag">Substitute exceeds original caption</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="dual-divider"></div>
+
+        <!-- SENATE COMMITTEE -->
+        <div class="dual-col">
+          <div class="node node-poo">
+            <div class="poo-badge">⚠ POINT OF ORDER</div>
+            <div class="node-title"><span class="node-icon">🏛️</span> SENATE STANDING COMMITTEE</div>
+            <div class="node-body">Lt. Governor refers bill to committee. Public hearing held; substitute bills may be offered. Committee votes to report favorably to full Senate. Unlike the House, Senate committee chairs wield significant scheduling power.</div>
+            <div class="poo-risks">
+              <div class="poo-risk-tag">Improper referral</div>
+              <div class="poo-risk-tag">Report defects</div>
+              <div class="poo-risk-tag">Insufficient notice</div>
+              <div class="poo-risk-tag">Caption inadequacy</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- PHASE III: CALENDAR / SCHEDULING -->
+      <div class="section-strip">
+        <div class="section-strip-bar" style="background:linear-gradient(90deg, transparent, var(--house-color));"></div>
+        <div class="section-strip-label" style="background:rgba(0,50,100,0.3); color:#aaa; border:1px solid rgba(153,153,255,0.3);">◈ PHASE III — SCHEDULING & CALENDAR</div>
+        <div class="section-strip-bar" style="background:linear-gradient(90deg, var(--senate-color), transparent);"></div>
+      </div>
+
+      <div class="dual-row">
+        <!-- HOUSE CALENDARS -->
+        <div class="dual-col">
+          <div class="conn">
+            <div class="conn-line conn-line-house" style="height:14px;"></div>
+            <div class="conn-arrow" style="color:var(--house-color);">▼</div>
+          </div>
+          <div class="node node-poo">
+            <div class="poo-badge">⚠ POINT OF ORDER</div>
+            <div class="node-title"><span class="node-icon">📅</span> HOUSE CALENDARS COMMITTEE</div>
+            <div class="node-body">The Calendars Committee sets the bill's place on the appropriate calendar: <strong>Major State Calendar</strong>, <strong>General State Calendar</strong>, <strong>Constitutional Amendments Calendar</strong>, or <strong>Local/Consent Calendar</strong>. Controls pace of House floor business.</div>
+            <div class="poo-risks">
+              <div class="poo-risk-tag">Improper calendar placement</div>
+              <div class="poo-risk-tag">Notice requirements (Rule 4)</div>
+              <div class="poo-risk-tag">Copy of bill not distributed</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="dual-divider"></div>
+
+        <!-- SENATE INTENT CALENDAR -->
+        <div class="dual-col">
+          <div class="conn">
+            <div class="conn-line conn-line-senate" style="height:14px;"></div>
+            <div class="conn-arrow" style="color:var(--senate-color);">▼</div>
+          </div>
+          <div class="node node-poo">
+            <div class="poo-badge">⚠ POINT OF ORDER</div>
+            <div class="node-title"><span class="node-icon">📅</span> SENATE INTENT CALENDAR</div>
+            <div class="node-body">Lt. Governor designates bills on the <strong>Intent Calendar</strong>. A <strong>mandatory 24-hour notice</strong> must be given to all senators before a bill may be brought to the floor for a vote. Failure to provide notice is a fatal procedural defect.</div>
+            <div class="poo-risks">
+              <div class="poo-risk-tag">24-hour notice not given</div>
+              <div class="poo-risk-tag">Senate Rule 11.10 violation</div>
+              <div class="poo-risk-tag">Improper posting</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- PHASE IV: FLOOR ACTION -->
+      <div class="section-strip">
+        <div class="section-strip-bar" style="background:linear-gradient(90deg, transparent, var(--house-color));"></div>
+        <div class="section-strip-label" style="background:rgba(0,50,100,0.3); color:#aaa; border:1px solid rgba(153,153,255,0.3);">◈ PHASE IV — FLOOR DEBATE & PASSAGE (ORIGINATING CHAMBER)</div>
+        <div class="section-strip-bar" style="background:linear-gradient(90deg, var(--senate-color), transparent);"></div>
+      </div>
+
+      <div class="dual-row">
+        <!-- HOUSE FLOOR -->
+        <div class="dual-col">
+          <div class="conn">
+            <div class="conn-line conn-line-house" style="height:14px;"></div>
+            <div class="conn-arrow" style="color:var(--house-color);">▼</div>
+          </div>
+          <div class="node node-poo">
+            <div class="poo-badge">⚠ POINT OF ORDER</div>
+            <div class="node-title"><span class="node-icon">🎙️</span> HOUSE FLOOR — 2ND & 3RD READINGS</div>
+            <div class="node-body"><strong>2nd Reading:</strong> Full debate. Members offer floor amendments (must be germane). Any member may raise a Point of Order against procedure or rule violations — sustained POOs can kill the bill or table an amendment. <strong>3rd Reading:</strong> Final vote; only minor corrections allowed. Requires simple majority (76/150).</div>
+            <div class="poo-risks">
+              <div class="poo-risk-tag">Amendment not germane</div>
+              <div class="poo-risk-tag">One-subject rule (Art. III §35)</div>
+              <div class="poo-risk-tag">Caption insufficient</div>
+              <div class="poo-risk-tag">House Rules Ch. 11 violations</div>
+              <div class="poo-risk-tag">Local bill caption defects</div>
+            </div>
+          </div>
+          <div class="conn">
+            <div class="conn-line conn-line-house" style="height:14px;"></div>
+            <div class="conn-arrow" style="color:var(--house-color);">▼</div>
+          </div>
+          <div class="node node-house">
+            <div class="node-title"><span style="font-size:16px">✅</span> HOUSE PASSAGE</div>
+            <div class="node-body">Bill passes by majority vote (76 of 150). Officially <strong>engrossed</strong> — clean copy prepared. Transmitted to Senate via official message.</div>
+          </div>
+        </div>
+
+        <div class="dual-divider"></div>
+
+        <!-- SENATE FLOOR -->
+        <div class="dual-col">
+          <div class="conn">
+            <div class="conn-line conn-line-senate" style="height:14px;"></div>
+            <div class="conn-arrow" style="color:var(--senate-color);">▼</div>
+          </div>
+          <div class="node node-poo">
+            <div class="poo-badge">⚠ POINT OF ORDER</div>
+            <div class="node-title"><span class="node-icon">🎙️</span> SENATE FLOOR — 2ND & 3RD READINGS</div>
+            <div class="node-body"><strong>2nd Reading:</strong> Floor debate; amendments offered. A <strong>blocking motion</strong> may require 3/5 vote (19/31) to proceed. Members may raise Points of Order. <strong>3rd Reading:</strong> Final vote on passage. Simple majority required (16/31). Lt. Gov. presides and rules on procedural questions.</div>
+            <div class="poo-risks">
+              <div class="poo-risk-tag">Amendment not germane</div>
+              <div class="poo-risk-tag">Amendment exceeds caption scope</div>
+              <div class="poo-risk-tag">Senate Rules violations</div>
+              <div class="poo-risk-tag">Blocking motion procedure</div>
+            </div>
+          </div>
+          <div class="conn">
+            <div class="conn-line conn-line-senate" style="height:14px;"></div>
+            <div class="conn-arrow" style="color:var(--senate-color);">▼</div>
+          </div>
+          <div class="node node-senate">
+            <div class="node-title"><span style="font-size:16px">✅</span> SENATE PASSAGE</div>
+            <div class="node-body">Bill passes by majority vote (16 of 31). Engrossed and transmitted to the House via official message.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- CROSS CHAMBER TRANSMISSION -->
+      <div class="conn">
+        <div class="conn-line conn-line-neutral" style="height:14px;"></div>
+        <div class="conn-arrow" style="color:var(--lcars-teal);">▼</div>
+      </div>
+      <div class="cross-label">
+        <div class="cross-line"></div>
+        <div class="cross-text">⟵ CROSS-CHAMBER TRANSMISSION · BILL SENT TO OPPOSITE CHAMBER ⟶</div>
+        <div class="cross-line"></div>
+      </div>
+
+      <!-- PHASE V: SECOND CHAMBER -->
+      <div class="section-strip">
+        <div class="section-strip-bar" style="background:linear-gradient(90deg, transparent, var(--senate-color));"></div>
+        <div class="section-strip-label" style="background:rgba(80,0,120,0.2); color:var(--lcars-purple); border:1px solid var(--lcars-purple);">◈ PHASE V — SECOND CHAMBER REVIEW</div>
+        <div class="section-strip-bar" style="background:linear-gradient(90deg, var(--house-color), transparent);"></div>
+      </div>
+
+      <div class="dual-row">
+        <div class="dual-col">
+          <div class="node node-poo">
+            <div class="poo-badge">⚠ POINT OF ORDER</div>
+            <div class="node-title"><span class="node-icon">🔄</span> HOUSE RECEIVES SENATE BILL</div>
+            <div class="node-body">Senate bill sent to House, referred to committee, goes through full House process. House may pass without changes, amend and return, or refuse to concur — triggering conference.</div>
+            <div class="poo-risks">
+              <div class="poo-risk-tag">All House floor rules apply</div>
+              <div class="poo-risk-tag">Amendment germaneness</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="dual-divider"></div>
+
+        <div class="dual-col">
+          <div class="node node-poo">
+            <div class="poo-badge">⚠ POINT OF ORDER</div>
+            <div class="node-title"><span class="node-icon">🔄</span> SENATE RECEIVES HOUSE BILL</div>
+            <div class="node-body">House bill sent to Senate, referred to committee, goes through full Senate process. Senate may concur with all House amendments, amend further, or refuse — triggering conference.</div>
+            <div class="poo-risks">
+              <div class="poo-risk-tag">All Senate floor rules apply</div>
+              <div class="poo-risk-tag">Notice requirements</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- PHASE VI: CONFERENCE -->
+      <div class="section-strip">
+        <div class="section-strip-bar" style="background:linear-gradient(90deg, transparent, var(--lcars-teal));"></div>
+        <div class="section-strip-label" style="background:rgba(0,80,80,0.2); color:var(--lcars-teal); border:1px solid var(--lcars-teal);">◈ PHASE VI — CONFERENCE (IF CHAMBERS DISAGREE)</div>
+        <div class="section-strip-bar" style="background:linear-gradient(90deg, var(--lcars-teal), transparent);"></div>
+      </div>
+
+      <div class="conn">
+        <div class="conn-line conn-line-shared" style="height:10px;"></div>
+        <div class="conn-arrow" style="color:var(--lcars-teal);">▼</div>
+      </div>
+
+      <div class="node node-poo">
+        <div class="poo-badge">⚠ POINT OF ORDER</div>
+        <div class="node-title"><span class="node-icon">🤝</span> CONFERENCE COMMITTEE · JOINT BICAMERAL</div>
+        <div class="node-body">Each chamber appoints conferees (5 from House, 5 from Senate) to negotiate differences. The Conference Committee may only address matters in <strong>genuine disagreement</strong> — it cannot introduce new subjects outside the scope of the House/Senate versions. Both chambers must adopt the conference report by majority vote with no further amendments allowed.</div>
+        <div class="poo-risks">
+          <div class="poo-risk-tag">Report exceeds scope of differences</div>
+          <div class="poo-risk-tag">New subject introduced</div>
+          <div class="poo-risk-tag">Exceeds original caption</div>
+          <div class="poo-risk-tag">Improper adoption procedure</div>
+        </div>
+      </div>
+
+      <!-- ENROLLMENT -->
+      <div class="conn">
+        <div class="conn-line conn-line-shared" style="height:14px;"></div>
+        <div class="conn-arrow" style="color:var(--lcars-teal);">▼</div>
+        <div class="conn-label" style="color:var(--lcars-teal);">BOTH CHAMBERS ADOPT · BILL MOVES TO ENROLLMENT</div>
+      </div>
+
+      <div class="node node-shared">
+        <div class="node-title"><span class="node-icon">📜</span> ENROLLMENT & ENGROSSMENT · FINAL CLEAN COPY</div>
+        <div class="node-body">An official clean copy of the final bill (incorporating all amendments) is prepared — this is the <strong>enrolled bill</strong>. Signed by the <strong>Speaker of the House</strong> and the <strong>Lieutenant Governor</strong>. Transmitted to the Governor's office.</div>
+      </div>
+
+      <!-- GOVERNOR -->
+      <div class="section-strip">
+        <div class="section-strip-bar" style="background:linear-gradient(90deg, transparent, var(--lcars-yellow));"></div>
+        <div class="section-strip-label" style="background:rgba(80,60,0,0.3); color:var(--lcars-yellow); border:1px solid var(--lcars-yellow);">◈ PHASE VII — EXECUTIVE ACTION · GOVERNOR'S DESK</div>
+        <div class="section-strip-bar" style="background:linear-gradient(90deg, var(--lcars-yellow), transparent);"></div>
+      </div>
+
+      <div class="conn">
+        <div class="conn-line conn-line-gold" style="height:14px;"></div>
+        <div class="conn-arrow" style="color:var(--lcars-yellow);">▼</div>
+      </div>
+
+      <div class="node node-gov">
+        <div class="node-title"><span class="node-icon">🏛️</span> GOVERNOR'S REVIEW · COMMAND DECISION</div>
+        <div class="node-body">Governor has <strong>10 days (excluding Sundays)</strong> to act while the Legislature is in session, or <strong>20 days</strong> after adjournment. Three options: Sign into law, allow to become law without signature (no action), or Veto. The Governor may also use a <strong>line-item veto</strong> on appropriations bills only.</div>
+      </div>
+
+      <div class="conn">
+        <div class="conn-line conn-line-gold" style="height:12px;"></div>
+        <div class="conn-arrow" style="color:var(--lcars-yellow);">▼</div>
+        <div class="conn-label" style="color:var(--lcars-yellow);">GOVERNOR CHOOSES ONE OF THREE OUTCOMES</div>
+      </div>
+
+      <!-- THREE OUTCOMES -->
+      <div class="triple-row">
+        <div class="triple-col">
+          <div class="node node-law" style="max-width:100%;">
+            <div class="node-title" style="font-size:8px;">✅ SIGN</div>
+            <div class="node-body" style="font-size:12px;">Governor signs. Bill becomes law on effective date.</div>
+          </div>
+        </div>
+        <div class="triple-col">
+          <div class="node node-shared" style="max-width:100%;">
+            <div class="node-title" style="font-size:8px;">🕐 NO ACTION</div>
+            <div class="node-body" style="font-size:12px;">No signature within time limit = automatically becomes law (in session). Returned unsigned after adjournment = <strong>pocket veto</strong> (bill dies).</div>
+          </div>
+        </div>
+        <div class="triple-col">
+          <div class="node node-fail" style="max-width:100%;">
+            <div class="node-title" style="font-size:8px;">❌ VETO</div>
+            <div class="node-body" style="font-size:12px;">Returned to Legislature. Override requires <strong>2/3 vote</strong> in each chamber (100 House / 21 Senate). Override succeeds → law. Fails → bill dies.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- FINAL LAW -->
+      <div class="conn">
+        <div class="conn-line conn-line-green" style="height:20px;"></div>
+        <div class="conn-arrow" style="color:var(--lcars-green);">▼</div>
+        <div class="conn-label" style="color:var(--lcars-green);">MISSION ACCOMPLISHED · ENROLLED BILL ENACTED</div>
+      </div>
+
+      <div class="node node-law">
+        <div class="node-title"><span class="node-icon">⚖️</span> ENACTED INTO TEXAS LAW · MISSION COMPLETE</div>
+        <div class="node-body">
+          Bill becomes a <strong>Texas Act</strong> — assigned a chapter number and codified into the Texas Statutes. Filed with the <strong>Secretary of State</strong>.<br><br>
+          <strong>Effective date options:</strong><br>
+          • <em>Standard:</em> September 1st following passage<br>
+          • <em>Immediate effect:</em> Requires a 2/3 vote in both chambers (emergency clause)<br>
+          • <em>Specific date:</em> As stated in the bill text
+        </div>
+      </div>
+
+    </div><!-- end flow-main -->
+
+    <div class="chamber-label-vert senate">SENATE</div>
+
+  </div><!-- end flowchart-outer -->
+
+  <!-- POO SUMMARY PANEL -->
+  <div class="poo-panel">
+    <div class="poo-panel-title">⚠ STARFLEET THREAT ASSESSMENT — POINT OF ORDER VULNERABILITY MATRIX ⚠</div>
+    <div class="poo-grid">
+      <div class="poo-col">
+        <div class="poo-col-title" style="color:var(--house-color);">HOUSE THREAT VECTORS</div>
+        <div class="poo-list">
+          ▸ Committee report not properly signed or filed<br>
+          ▸ 24-hour hearing notice not posted<br>
+          ▸ Floor amendment not germane to subject<br>
+          ▸ Bill violates one-subject rule (Art. III §35)<br>
+          ▸ Caption insufficient to describe contents<br>
+          ▸ Local/private bill notice defects<br>
+          ▸ Calendars Committee placement errors<br>
+          ▸ Copy of bill not distributed to members<br>
+          ▸ House Rules Chapter 11 violations (decorum)
+        </div>
+      </div>
+      <div class="poo-col">
+        <div class="poo-col-title" style="color:var(--senate-color);">SENATE THREAT VECTORS</div>
+        <div class="poo-list">
+          ▸ 24-hour Intent Calendar notice not given<br>
+          ▸ Amendment scope exceeds bill's caption<br>
+          ▸ Germaneness violations on floor amendments<br>
+          ▸ Hearing notice not properly posted<br>
+          ▸ Blocking motion procedural violations<br>
+          ▸ Senate Rule 11.10 notice violations<br>
+          ▸ Committee report defects<br>
+          ▸ Amendment broadens original caption scope
+        </div>
+      </div>
+      <div class="poo-col">
+        <div class="poo-col-title" style="color:var(--lcars-teal);">CONSTITUTIONAL / CONFERENCE THREATS</div>
+        <div class="poo-list">
+          ▸ Art. III §35: One-subject rule violations<br>
+          ▸ Art. III §36: Bill revival by reference<br>
+          ▸ Art. III §30: Rider without proper notice<br>
+          ▸ Art. VIII §1-f: Dedicated fund raids<br>
+          ▸ Conference report exceeds scope of differences<br>
+          ▸ Conference introduces new subject matter<br>
+          ▸ Constitutional caption notice inadequacy
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <div class="lcars-footer">
+    <div class="lcars-footer-corner"></div>
+    <div class="lcars-footer-bar1"></div>
+    <div class="lcars-footer-bar2">
+      <div class="footer-text">TX-LEG-LCARS · STARDATE 89TH SESSION · STARFLEET LEGISLATIVE COMMAND DATABASE · ALL RIGHTS RESERVED UNDER FEDERATION LAW</div>
+    </div>
+    <div class="lcars-footer-end">
+      <div class="footer-text">END TX</div>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>
